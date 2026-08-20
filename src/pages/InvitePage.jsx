@@ -13,28 +13,15 @@ export function InvitePage({ user }) {
     setLoading(true)
     const code = Math.random().toString(36).slice(2, 10).toUpperCase()
     const gueltigBis = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-
     const { data, error } = await supabase
       .from('invites')
-      .insert({
-        id: crypto.randomUUID(),
-        child_id: childId,
-        code,
-        erstellt_von: user.id,
-        gueltig_bis: gueltigBis,
-      })
-      .select()
-      .single()
-
-    if (!error && data) {
-      setInvite(data)
-    }
+      .insert({ id: crypto.randomUUID(), child_id: childId, code, erstellt_von: user.id, gueltig_bis: gueltigBis })
+      .select().single()
+    if (!error && data) setInvite(data)
     setLoading(false)
   }
 
-  const link = invite
-    ? `${window.location.origin}/join/${invite.code}`
-    : null
+  const link = invite ? `${window.location.origin}/join/${invite.code}` : null
 
   const copyLink = async () => {
     if (!link) return
@@ -44,66 +31,99 @@ export function InvitePage({ user }) {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <div className="bg-white border-b border-gray-100 px-5 pt-14 pb-4">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl hover:bg-gray-50 transition">
-            <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <h1 className="text-xl font-bold text-gray-900">Einladen</h1>
-        </div>
-      </div>
+    <div className="min-h-screen flex flex-col" style={{ background: '#fef8f1' }}>
+      {/* Header */}
+      <header className="bg-surface shadow-soft flex justify-between items-center w-full px-container-margin py-sm sticky top-0 z-50 pt-14">
+        <button onClick={() => navigate(-1)} className="text-on-surface-variant p-1 hover:opacity-80 transition active:scale-95">
+          <span className="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 className="text-headline-md font-headline-md text-primary">Meilenstein Teilen</h1>
+        <div className="w-8" />
+      </header>
 
-      <div className="px-5 pt-6 space-y-5">
-        <div className="bg-white rounded-2xl shadow-card p-5">
-          <h2 className="font-semibold text-gray-900 mb-2">Partner oder Großeltern einladen</h2>
-          <p className="text-gray-500 text-sm mb-5 leading-relaxed">
-            Generiere einen Einladungslink und teile ihn. Die Person kann nach dem Einloggen Meilensteine einsehen und hinzufügen.
+      <main className="flex-1 w-full max-w-2xl mx-auto px-container-margin pt-xl pb-28 flex flex-col gap-xl">
+        {/* Subtitle */}
+        <header className="text-center space-y-sm">
+          <p className="text-body-md font-body-md text-on-surface-variant">
+            Lade Familie und Freunde ein, an den Erinnerungen teilzuhaben.
           </p>
+        </header>
 
-          {!invite ? (
-            <button
-              onClick={generateInvite}
-              disabled={loading}
-              className="w-full py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 transition disabled:opacity-60"
-            >
-              {loading ? 'Generiere…' : 'Einladungslink generieren'}
-            </button>
-          ) : (
-            <div className="space-y-3">
-              <div className="bg-brand-50 rounded-xl p-4">
-                <p className="text-xs text-brand-600 font-medium mb-1">Einladungslink</p>
-                <p className="text-sm text-brand-900 break-all font-mono">{link}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={copyLink}
-                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-50 transition"
-                >
-                  {copied ? '✓ Kopiert!' : 'Link kopieren'}
-                </button>
-                <button
-                  onClick={() => navigator.share?.({ title: 'Kindermeilensteine – Einladung', url: link })}
-                  className="flex-1 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition"
-                >
-                  Teilen
-                </button>
-              </div>
-              <p className="text-xs text-gray-400 text-center">
-                Gültig bis: {new Date(invite.gueltig_bis).toLocaleDateString('de-DE')}
-              </p>
-            </div>
-          )}
-        </div>
+        {/* Share Card */}
+        <section className="bg-surface-container-lowest rounded-xl shadow-soft p-lg flex flex-col items-center text-center relative overflow-hidden">
+          <div
+            className="absolute top-0 left-0 w-full h-32 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(255,218,185,0.3), transparent)' }}
+          />
+          <div className="z-10 w-full">
+            <span className="material-symbols-outlined text-4xl text-primary ms-fill mb-md block">family_restroom</span>
+            <h2 className="text-headline-sm font-headline-sm text-on-surface mb-xs">Dein Einladungscode</h2>
+            <p className="text-body-md font-body-md text-on-surface-variant mb-lg">
+              Teile diesen Code, um Zugriff zu gewähren.
+            </p>
 
-        <div className="bg-amber-50 rounded-2xl p-4">
-          <p className="text-amber-700 text-sm">
-            <strong>Hinweis:</strong> Der Link ist 7 Tage gültig. Die eingeladene Person erhält Lesezugriff und kann Einträge hinzufügen, aber keine Kinderprofile löschen.
+            {!invite ? (
+              <button
+                onClick={generateInvite}
+                disabled={loading}
+                className="py-md px-xl rounded-full text-label-sm font-label-sm text-on-primary-container shadow-soft hover:opacity-90 transition disabled:opacity-60"
+                style={{ background: 'linear-gradient(135deg, #74593f, #8a6a4c)' }}
+              >
+                <span className="text-on-primary">
+                  {loading ? 'Generiere…' : 'Einladungslink generieren'}
+                </span>
+              </button>
+            ) : (
+              <>
+                {/* Code display */}
+                <div className="bg-surface-container-low rounded-full py-md px-xl mb-lg inline-block border-2 border-surface-variant">
+                  <span className="text-display-lg font-display-lg tracking-widest text-primary">
+                    {invite.code}
+                  </span>
+                </div>
+
+                {/* Link */}
+                <div className="flex items-center justify-center gap-sm bg-surface rounded-full p-sm px-md mb-lg">
+                  <span className="material-symbols-outlined text-on-surface-variant text-xl">link</span>
+                  <span className="text-body-md font-body-md text-primary truncate max-w-[220px]">{link}</span>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-md w-full justify-center">
+                  <button
+                    onClick={copyLink}
+                    className="flex-1 flex items-center justify-center gap-sm bg-surface-container-low hover:bg-surface-container-highest text-primary text-label-sm font-label-sm rounded-full py-md px-xl transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">{copied ? 'check' : 'content_copy'}</span>
+                    {copied ? 'Kopiert!' : 'Link kopieren'}
+                  </button>
+                  {navigator.share && (
+                    <button
+                      onClick={() => navigator.share({ title: 'Kindermeilensteine – Einladung', url: link })}
+                      className="flex-1 flex items-center justify-center gap-sm text-on-primary text-label-sm font-label-sm rounded-full py-md px-xl shadow-soft hover:opacity-90 transition"
+                      style={{ background: 'linear-gradient(135deg, #74593f, #8a6a4c)' }}
+                    >
+                      <span className="material-symbols-outlined text-xl">share</span>
+                      Teilen
+                    </button>
+                  )}
+                </div>
+                <p className="text-caption font-caption text-outline mt-md">
+                  Gültig bis: {new Date(invite.gueltig_bis).toLocaleDateString('de-DE')}
+                </p>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* Info */}
+        <section className="bg-secondary-container/30 rounded-xl p-md flex gap-sm">
+          <span className="material-symbols-outlined text-secondary shrink-0 mt-0.5">info</span>
+          <p className="text-body-md font-body-md text-on-surface-variant">
+            Eingeladene Personen können Meilensteine einsehen und hinzufügen, aber keine Kinderprofile löschen.
           </p>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   )
 }

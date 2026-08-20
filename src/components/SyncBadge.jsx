@@ -1,16 +1,17 @@
-export function SyncBadge({ status }) {
+export function SyncDot({ status }) {
   if (status === 'synced') {
     return (
-      <span className="inline-flex items-center gap-1 text-xs text-emerald-600">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-        Sync
-      </span>
+      <div
+        className="absolute top-md right-md w-2 h-2 rounded-full bg-tertiary"
+        style={{ boxShadow: '0 0 8px rgba(0,116,34,0.4)' }}
+        title="Synchronisiert"
+      />
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 text-xs text-amber-500">
-      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block animate-pulse" />
-      Ausstehend
-    </span>
+    <div
+      className="absolute top-md right-md w-2 h-2 rounded-full bg-outline animate-pulse"
+      title="Wartet auf Synchronisation"
+    />
   )
 }

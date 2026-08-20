@@ -9,84 +9,88 @@ export function ChildPage({ user }) {
   const { id } = useParams()
   const navigate = useNavigate()
   const { children, removeChild } = useChildren(user)
-  const { entries, loading, addEntry, removeEntry } = useEntries(id, user)
+  const { entries, loading, removeEntry } = useEntries(id, user)
   const [filter, setFilter] = useState('all')
-  const [showAddEntry, setShowAddEntry] = useState(false)
 
   const child = children.find(c => c.id === id)
   const isOwner = child?.owner_id === user?.id
-
-  if (!child && !loading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center px-5">
-        <div className="text-center">
-          <p className="text-gray-500 mb-4">Kind nicht gefunden</p>
-          <button onClick={() => navigate('/')} className="text-brand-600 font-medium">Zurück</button>
-        </div>
-      </div>
-    )
-  }
 
   const filtered = filter === 'all'
     ? entries
     : entries.filter(e => e.kategorie === filter)
 
   const handleDeleteChild = async () => {
-    if (!confirm(`${child?.name} und alle Einträge löschen?`)) return
+    if (!confirm(`${child?.name} wirklich löschen?`)) return
     await removeChild(id)
     navigate('/')
   }
 
   return (
-    <div className="min-h-screen bg-cream pb-28">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-5 pt-14 pb-4">
-        <div className="flex items-center gap-3 mb-4">
-          <button onClick={() => navigate('/')} className="p-2 -ml-2 rounded-xl hover:bg-gray-50 transition">
-            <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+    <div className="min-h-screen pb-28" style={{ background: '#fef8f1' }}>
+      {/* Sticky header */}
+      <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur-md pb-md pt-14 px-container-margin shadow-soft">
+        <div className="flex items-center gap-md mb-md">
+          {/* Avatar */}
+          <div
+            className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 border-2 border-primary-container"
+            style={{ boxShadow: '0 4px 12px rgba(116,89,63,0.15)' }}
+          >
+            {child?.foto_url ? (
+              <img src={child.foto_url} alt={child.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-primary-container flex items-center justify-center">
+                <span className="material-symbols-outlined text-on-primary-container ms-fill text-2xl">child_care</span>
+              </div>
+            )}
+          </div>
+
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-gray-900">{child?.name || '…'}</h1>
+            <h1 className="text-display-lg font-display-lg text-primary leading-none">{child?.name || '…'}</h1>
             {child?.geburtsdatum && (
-              <p className="text-gray-400 text-xs mt-0.5">
-                geb. {new Date(child.geburtsdatum).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}
+              <p className="text-body-md font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5">
+                <span className="material-symbols-outlined text-[16px]">child_care</span>
+                {(() => {
+                  const birth = new Date(child.geburtsdatum)
+                  const now = new Date()
+                  const months = Math.floor((now - birth) / (1000 * 60 * 60 * 24 * 30.44))
+                  const years = Math.floor(months / 12)
+                  const rem = months % 12
+                  if (years === 0) return `${months} Monate alt`
+                  if (rem === 0) return `${years} Jahre alt`
+                  return `${years} J. ${rem} M. alt`
+                })()}
               </p>
             )}
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex gap-1">
             <button
               onClick={() => navigate(`/child/${id}/invite`)}
-              className="p-2 rounded-xl hover:bg-gray-50 transition text-gray-500"
+              className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container transition"
               title="Einladen"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-              </svg>
+              <span className="material-symbols-outlined">group_add</span>
             </button>
             {isOwner && (
               <button
                 onClick={handleDeleteChild}
-                className="p-2 rounded-xl hover:bg-red-50 transition text-gray-400 hover:text-red-500"
+                className="p-2 rounded-full text-on-surface-variant hover:bg-error-container hover:text-error transition"
                 title="Kind löschen"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <span className="material-symbols-outlined">delete</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Category filter */}
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {/* Category filter chips */}
+        <div className="flex gap-sm overflow-x-auto scrollbar-hide pb-1 -mx-container-margin px-container-margin">
           <button
             onClick={() => setFilter('all')}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition ${
+            className={`shrink-0 px-4 py-2 rounded-full text-label-sm font-label-sm transition shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1)] active:scale-95 ${
               filter === 'all'
-                ? 'bg-brand-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-primary text-on-primary'
+                : 'bg-surface-container-high text-on-surface hover:bg-surface-variant'
             }`}
           >
             Alle
@@ -95,52 +99,67 @@ export function ChildPage({ user }) {
             <button
               key={cat.id}
               onClick={() => setFilter(cat.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition ${
+              className={`shrink-0 px-4 py-2 rounded-full text-label-sm font-label-sm transition active:scale-95 ${
                 filter === cat.id
-                  ? 'bg-brand-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary text-on-primary'
+                  : 'bg-surface-container-high text-on-surface hover:bg-surface-variant'
               }`}
             >
               {cat.label}
             </button>
           ))}
         </div>
-      </div>
+      </header>
 
-      {/* Entries */}
-      <div className="px-5 pt-4 space-y-3">
+      {/* Timeline */}
+      <main className="px-container-margin mt-lg max-w-lg mx-auto">
         {loading && (
-          <div className="space-y-3">
-            {[1,2,3].map(i => <div key={i} className="h-24 bg-white rounded-2xl animate-pulse" />)}
+          <div className="space-y-lg">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="pl-16">
+                <div className="h-24 bg-surface-container rounded-xl animate-pulse" />
+              </div>
+            ))}
           </div>
         )}
 
         {!loading && filtered.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-5xl mb-4">✨</div>
-            <p className="text-gray-500 font-medium mb-1">Noch kein Meilenstein</p>
-            <p className="text-gray-400 text-sm">Halte den ersten besonderen Moment fest!</p>
+          <div className="text-center py-20">
+            <span className="material-symbols-outlined text-6xl text-primary-container ms-fill block mb-4">
+              auto_stories
+            </span>
+            <p className="text-headline-sm font-headline-sm text-on-surface mb-1">Noch kein Meilenstein</p>
+            <p className="text-body-md font-body-md text-on-surface-variant">
+              Halte den ersten besonderen Moment fest!
+            </p>
           </div>
         )}
 
-        {filtered.map(entry => (
-          <EntryCard
-            key={entry.id}
-            entry={entry}
-            childBirthDate={child?.geburtsdatum}
-            onDelete={removeEntry}
-            isOwner={isOwner || entry.erstellt_von === user?.id}
-          />
-        ))}
-      </div>
+        <div className="flex flex-col gap-lg">
+          {filtered.map((entry, i) => (
+            <EntryCard
+              key={entry.id}
+              entry={entry}
+              childBirthDate={child?.geburtsdatum}
+              onDelete={removeEntry}
+              canDelete={isOwner || entry.erstellt_von === user?.id}
+              isLast={i === filtered.length - 1}
+            />
+          ))}
+        </div>
+      </main>
 
       {/* FAB */}
       <button
         onClick={() => navigate(`/child/${id}/add-entry`)}
-        className="fixed bottom-24 right-5 w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center text-2xl"
+        className="fixed bottom-24 right-6 w-14 h-14 flex items-center justify-center rounded-2xl z-50 transition-transform active:scale-90 hover:-translate-y-1"
+        style={{
+          background: 'linear-gradient(135deg, #ffdab9, #ffdcbe)',
+          boxShadow: '0 8px 24px rgba(255,218,185,0.6)',
+        }}
         aria-label="Meilenstein hinzufügen"
       >
-        +
+        <span className="material-symbols-outlined text-[32px] text-on-primary-container">add</span>
       </button>
     </div>
   )

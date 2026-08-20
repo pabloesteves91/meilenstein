@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { BottomNav } from './components/BottomNav'
 import { OfflineBanner } from './components/OfflineBanner'
@@ -10,11 +10,15 @@ import { InvitePage } from './pages/InvitePage'
 import { JoinPage } from './pages/JoinPage'
 import { SettingsPage } from './pages/SettingsPage'
 
+const BOTTOM_NAV_PATHS = ['/', '/settings']
+
 function ProtectedRoute({ user, loading, children }) {
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="text-4xl animate-pulse">⭐</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#fef8f1' }}>
+        <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center animate-pulse">
+          <span className="material-symbols-outlined text-on-primary-container ms-fill">child_care</span>
+        </div>
       </div>
     )
   }
@@ -22,12 +26,12 @@ function ProtectedRoute({ user, loading, children }) {
   return children
 }
 
-export default function App() {
-  const { user, loading } = useAuth()
+function AppLayout({ user, loading }) {
+  const { pathname } = useLocation()
+  const showNav = BOTTOM_NAV_PATHS.includes(pathname)
 
   return (
     <>
-      <OfflineBanner />
       <Routes>
         <Route path="/login" element={user && !loading ? <Navigate to="/" replace /> : <LoginPage />} />
         <Route path="/join/:code" element={<JoinPage user={user} />} />
@@ -37,7 +41,6 @@ export default function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <HomePage user={user} />
-              <BottomNav />
             </ProtectedRoute>
           }
         />
@@ -46,7 +49,6 @@ export default function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <ChildPage user={user} />
-              <BottomNav />
             </ProtectedRoute>
           }
         />
@@ -71,12 +73,24 @@ export default function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <SettingsPage user={user} />
-              <BottomNav />
             </ProtectedRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {user && !loading && <BottomNav />}
+    </>
+  )
+}
+
+export default function App() {
+  const { user, loading } = useAuth()
+
+  return (
+    <>
+      <OfflineBanner />
+      <AppLayout user={user} loading={loading} />
     </>
   )
 }

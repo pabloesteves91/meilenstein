@@ -1,5 +1,4 @@
-import { differenceInMonths, differenceInYears, format } from 'date-fns'
-import { de } from 'date-fns/locale'
+import { differenceInMonths, differenceInYears } from 'date-fns'
 
 function computeAge(birthDate) {
   const birth = new Date(birthDate)
@@ -11,41 +10,39 @@ function computeAge(birthDate) {
   return `${years} J. ${months} M. alt`
 }
 
-const AVATAR_COLORS = [
-  'from-violet-400 to-purple-500',
-  'from-pink-400 to-rose-500',
-  'from-blue-400 to-cyan-500',
-  'from-emerald-400 to-teal-500',
-  'from-amber-400 to-orange-500',
-]
-
-export function ChildCard({ child, index, onClick }) {
-  const gradient = AVATAR_COLORS[index % AVATAR_COLORS.length]
-  const initial = child.name?.[0]?.toUpperCase() || '?'
+export function ChildCard({ child, onClick }) {
   const age = child.geburtsdatum ? computeAge(child.geburtsdatum) : ''
-  const birthStr = child.geburtsdatum
-    ? format(new Date(child.geburtsdatum), 'd. MMMM yyyy', { locale: de })
+  const birthDate = child.geburtsdatum
+    ? new Date(child.geburtsdatum).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })
     : ''
 
   return (
     <button
       onClick={onClick}
-      className="w-full bg-white rounded-2xl shadow-card p-5 text-left hover:shadow-card-hover transition-all active:scale-[0.98] flex items-center gap-4"
+      className="w-full bg-surface-container-lowest rounded-xl p-md text-left hover:bg-surface-container-low transition-colors active:scale-[0.98] flex items-center gap-md"
+      style={{ boxShadow: '0 8px 20px rgba(116,89,63,0.06)' }}
     >
-      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden`}>
-        {child.foto_url
-          ? <img src={child.foto_url} alt={child.name} className="w-full h-full object-cover" />
-          : initial
-        }
+      {/* Avatar */}
+      <div
+        className="w-16 h-16 rounded-full overflow-hidden shrink-0 border-2 border-primary-container"
+        style={{ boxShadow: '0 4px 12px rgba(116,89,63,0.15)' }}
+      >
+        {child.foto_url ? (
+          <img src={child.foto_url} alt={child.name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-primary-container flex items-center justify-center">
+            <span className="material-symbols-outlined text-on-primary-container ms-fill text-2xl">child_care</span>
+          </div>
+        )}
       </div>
+
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-gray-900 text-base truncate">{child.name}</p>
-        {age && <p className="text-brand-600 text-sm font-medium mt-0.5">{age}</p>}
-        {birthStr && <p className="text-gray-400 text-xs mt-0.5">geb. {birthStr}</p>}
+        <p className="text-headline-sm font-headline-sm text-primary truncate">{child.name}</p>
+        {age && <p className="text-body-md font-body-md text-on-surface-variant mt-0.5">{age}</p>}
+        {birthDate && <p className="text-caption font-caption text-outline mt-0.5">geb. {birthDate}</p>}
       </div>
-      <svg className="w-5 h-5 text-gray-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
+
+      <span className="material-symbols-outlined text-outline shrink-0">chevron_right</span>
     </button>
   )
 }

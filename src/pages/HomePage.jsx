@@ -20,35 +20,37 @@ export function HomePage({ user }) {
   }
 
   return (
-    <div className="min-h-screen bg-cream pb-24">
+    <div className="min-h-screen pb-28" style={{ background: '#fef8f1' }}>
       {/* Header */}
-      <div className="px-5 pt-14 pb-6">
-        <p className="text-gray-400 text-sm">Willkommen zurück 👋</p>
-        <h1 className="text-2xl font-bold text-gray-900 mt-0.5">Deine Kinder</h1>
+      <div className="px-container-margin pt-14 pb-lg">
+        <p className="text-body-md font-body-md text-on-surface-variant flex items-center gap-1">
+          <span className="material-symbols-outlined text-[16px]">waving_hand</span>
+          Willkommen zurück
+        </p>
+        <h1 className="text-display-lg font-display-lg text-primary mt-1">Deine Kinder</h1>
       </div>
 
-      <div className="px-5 space-y-3">
+      <div className="px-container-margin space-y-sm">
         {loading && (
-          <div className="space-y-3">
-            {[1,2].map(i => (
-              <div key={i} className="h-20 bg-white rounded-2xl animate-pulse" />
+          <div className="space-y-sm">
+            {[1, 2].map(i => (
+              <div key={i} className="h-20 bg-surface-container rounded-xl animate-pulse" />
             ))}
           </div>
         )}
 
         {!loading && children.length === 0 && !showForm && (
-          <div className="text-center py-16">
-            <div className="text-5xl mb-4">🌱</div>
-            <p className="text-gray-500 font-medium mb-1">Noch kein Kind angelegt</p>
-            <p className="text-gray-400 text-sm">Füge dein erstes Kind hinzu, um zu beginnen.</p>
+          <div className="text-center py-20">
+            <span className="material-symbols-outlined text-6xl text-primary-container ms-fill block mb-4">baby_changing_station</span>
+            <p className="text-headline-sm font-headline-sm text-on-surface mb-1">Noch kein Kind angelegt</p>
+            <p className="text-body-md font-body-md text-on-surface-variant">Füge dein erstes Kind hinzu!</p>
           </div>
         )}
 
-        {!loading && children.map((child, i) => (
+        {!loading && children.map(child => (
           <ChildCard
             key={child.id}
             child={child}
-            index={i}
             onClick={() => navigate(`/child/${child.id}`)}
           />
         ))}
@@ -57,43 +59,44 @@ export function HomePage({ user }) {
         {showForm && (
           <form
             onSubmit={handleAdd}
-            className="bg-white rounded-2xl shadow-card p-5 space-y-4"
+            className="bg-surface-container-lowest rounded-xl shadow-soft p-md space-y-md"
           >
-            <h2 className="font-semibold text-gray-900">Kind hinzufügen</h2>
+            <h2 className="text-headline-sm font-headline-sm text-on-surface">Kind hinzufügen</h2>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
+              <label className="text-label-sm font-label-sm text-on-surface-variant block ml-1 mb-sm">Name</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 placeholder="z.B. Lena"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 outline-none transition text-sm"
+                className="w-full bg-surface-container-lowest border-2 border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:outline-none focus:border-primary-container transition-all text-on-surface"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Geburtsdatum</label>
+              <label className="text-label-sm font-label-sm text-on-surface-variant block ml-1 mb-sm">Geburtsdatum</label>
               <input
                 type="date"
                 required
                 value={form.geburtsdatum}
                 max={new Date().toISOString().split('T')[0]}
                 onChange={e => setForm(f => ({ ...f, geburtsdatum: e.target.value }))}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 outline-none transition text-sm"
+                className="w-full bg-surface-container-lowest border-2 border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:outline-none focus:border-primary-container transition-all text-on-surface"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-sm">
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition"
+                className="flex-1 py-3 rounded-full border-2 border-outline-variant text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container transition"
               >
                 Abbrechen
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition disabled:opacity-60"
+                className="flex-1 py-3 rounded-full text-label-sm font-label-sm text-on-primary-container shadow-soft hover:opacity-90 transition disabled:opacity-60"
+                style={{ background: 'linear-gradient(135deg, #ffdab9, #ffdcbe)' }}
               >
                 {saving ? 'Speichern…' : 'Speichern'}
               </button>
@@ -101,12 +104,13 @@ export function HomePage({ user }) {
           </form>
         )}
 
+        {/* Add button */}
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="w-full py-3.5 rounded-2xl border-2 border-dashed border-brand-200 text-brand-600 font-medium text-sm hover:border-brand-400 hover:bg-brand-50 transition flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-xl border-2 border-dashed border-outline-variant text-label-sm font-label-sm text-on-surface-variant hover:border-primary-container hover:text-primary hover:bg-surface-container-low transition flex items-center justify-center gap-sm"
           >
-            <span className="text-lg">+</span>
+            <span className="material-symbols-outlined text-[20px]">add_circle</span>
             Kind hinzufügen
           </button>
         )}
