@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emil's Timeline - Meilenstein</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fef8f1",
+                        "surface": "#fef8f1",
+                        "on-primary-container": "#795e44",
+                        "secondary-fixed": "#bbebf1",
+                        "secondary-container": "#b8e8ee",
+                        "on-tertiary-container": "#007422",
+                        "surface-container-low": "#f9f3ec",
+                        "on-surface": "#1d1b17",
+                        "surface-variant": "#e7e2db",
+                        "outline": "#80756c",
+                        "surface-container-highest": "#e7e2db",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005316",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#93f993",
+                        "inverse-on-surface": "#f6f0e9",
+                        "background": "#fef8f1",
+                        "on-error": "#ffffff",
+                        "tertiary": "#006e20",
+                        "on-tertiary-fixed": "#002105",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#e3c0a0",
+                        "on-secondary-fixed": "#001f23",
+                        "outline-variant": "#d2c4b9",
+                        "surface-dim": "#dfd9d2",
+                        "on-secondary-container": "#3b6a6f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#ffdab9",
+                        "on-background": "#1d1b17",
+                        "on-primary-fixed-variant": "#5a422a",
+                        "on-surface-variant": "#4f453d",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#ffdcbe",
+                        "inverse-surface": "#32302c",
+                        "secondary-fixed-dim": "#9fcfd5",
+                        "primary-fixed-dim": "#e3c0a0",
+                        "primary": "#74593f",
+                        "tertiary-fixed-dim": "#77dc7a",
+                        "surface-tint": "#74593f",
+                        "tertiary-container": "#91f892",
+                        "surface-container-high": "#ede7e0",
+                        "on-primary-fixed": "#2a1704",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#1d4d53",
+                        "secondary": "#37656b",
+                        "surface-container": "#f3ede6",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Quicksand"],
+                        "label-sm": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "headline-sm": ["Quicksand"],
+                        "caption": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "label-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #fef8f1; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            bottom: -24px;
+            width: 2px;
+            background: #e7e2db;
+            z-index: 0;
+        }
+        .timeline-card:last-child .timeline-line::before { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased pb-24">
+<!-- Header Section (TopAppBar Alternative for Profile Context) -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md pb-md pt-lg px-container-margin shadow-sm">
+<div class="flex items-center gap-md">
+<div class="relative w-16 h-16 rounded-full overflow-hidden shadow-[0_4px_12px_rgba(116,89,63,0.15)] ring-2 ring-primary-container">
+<img alt="Emil" class="w-full h-full object-cover" data-alt="A close-up portrait of a happy toddler boy named Emil, aged around 13 months, with soft wispy hair, smiling warmly in soft natural daylight. The background is softly blurred, showing a bright, neutral-toned nursery environment. The image feels warm, nostalgic, and high-quality, fitting a premium digital scrapbook app aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHIKVr1-nrFy1QnaIqecljSXUCso-ha5l-lA0CM10iKnhhge_KrBNMS1M3_uM13YerALzV8Ydf6oMN7H0wo5pYMQsI5NmpFnOmVBHLWqn7LvHEpQHZWgw_8aYLjjTIK9tn0p4IyoWGoBtMgKVrnLNQLZHW6PAEloMnYwEFCCJde176-XFS5uURXpPJi62jBHbbCgIFOqhNDPrbABWJU7QLeh7lOaBqZ-BJ7kYuA8GaLyM2Zzxvt6A2EQ"/>
+</div>
+<div>
+<h1 class="text-display-lg font-display-lg text-primary">Emil</h1>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">child_care</span>
+                    13 months old
+                </p>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex overflow-x-auto hide-scrollbar gap-sm mt-lg pb-2 -mx-container-margin px-container-margin">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-on-primary text-label-sm font-label-sm shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1)] transition-transform active:scale-95">All</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Motorik</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Sprache</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Sozial</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Anderes</button>
+</div>
+</header>
+<!-- Timeline Content -->
+<main class="px-container-margin mt-lg max-w-lg mx-auto">
+<div class="flex flex-col gap-lg">
+<!-- Milestone Entry 1 -->
+<article class="timeline-card relative pl-16">
+<div class="timeline-line"></div>
+<!-- Timeline Node -->
+<div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-primary-container flex items-center justify-center z-10 shadow-[0_4px_12px_rgba(116,89,63,0.1)] border-4 border-surface">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">directions_walk</span>
+</div>
+<!-- Card Content -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0_8px_20px_rgba(116,89,63,0.06)] relative overflow-hidden">
+<!-- Sync Dot -->
+<div class="absolute top-md right-md w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(0,116,34,0.4)]" title="Synced"></div>
+<h2 class="text-headline-sm font-headline-sm text-primary mb-xs">Erste Schritte</h2>
+<div class="flex items-center gap-2 mb-sm text-on-surface-variant">
+<span class="text-label-sm font-label-sm bg-surface-variant px-2 py-1 rounded-sm">12. Okt 2023</span>
+<span class="text-caption font-caption">• Age: 13 months</span>
+</div>
+<div class="mt-sm flex gap-sm">
+<div class="w-24 h-24 rounded-lg overflow-hidden shadow-sm flex-shrink-0">
+<img alt="First steps photo" class="w-full h-full object-cover" data-alt="A small, soft-focus candid photo of a toddler's wobbly first steps, wearing cute soft shoes. The lighting is warm indoor afternoon sun casting gentle shadows on a wooden floor. The aesthetic is nostalgic and personal, typical of a family photo album." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr8vx9zXTtANSiv5BDAPhl-rxAuJU7xTNwd2dq-3aIeg7MHW2_fgI2jHw29OOUYZ-eSxcejUm0h1I1SFA18zYCDmvM1kteHlaqcff8peiLhjxdYnHmD7NvnpMgcHrdh36a0sGyHY5nUtZ92iOj0MdhEOAxDniwo8Yf31KOzFZj1PGxrdxCbcJuGONHboioUtHNuLWTBs1s499cUi9-krVxCNNe7-YkfcPj7NrSRCkJ3rh9lM1Uj0Td1w"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<p class="text-body-md font-body-md text-on-surface line-clamp-2">Emil took 3 independent steps today in the living room!</p>
+<div class="flex items-center gap-xs mt-auto">
+<div class="w-6 h-6 rounded-full overflow-hidden ring-1 ring-surface-variant">
+<img alt="Parent" class="w-full h-full object-cover" data-alt="A tiny profile picture of a smiling young mother with brown hair, soft natural lighting, warm and welcoming expression. High quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs6k2vpQ-CLj26VkZbOYgPwhJ8mvfJJMv0rOOMTVCp3U-c_l6NVF6OAhuJy15L0ObkVZrGHekHss7Hd-qw5auigXZmSRYSlZMFzKk-nkVgtPePUnzZsFrajyCfecztnf6v0uazZXqz_-r0z7Pv5J4yAyL2T--T1pXzbe7M9Wn4OT-fcFXtcX5nuvsyIU5Wvle-d0tdoekcub0hVj-bSYFUn4GkvxQVwyuQo68dysE9CjhxMX9BGKiPtw"/>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">Sophie</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Milestone Entry 2 -->
+<article class="timeline-card relative pl-16">
+<div class="timeline-line"></div>
+<div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center z-10 shadow-[0_4px_12px_rgba(59,106,111,0.1)] border-4 border-surface">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+</div>
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0_8px_20px_rgba(116,89,63,0.06)] relative overflow-hidden">
+<div class="absolute top-md right-md w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(0,116,34,0.4)]" title="Synced"></div>
+<h2 class="text-headline-sm font-headline-sm text-secondary mb-xs">Erstes Wort: "Mama"</h2>
+<div class="flex items-center gap-2 mb-sm text-on-surface-variant">
+<span class="text-label-sm font-label-sm bg-surface-variant px-2 py-1 rounded-sm">28. Sep 2023</span>
+<span class="text-caption font-caption">• Age: 12.5 months</span>
+</div>
+<div class="mt-sm flex flex-col justify-between">
+<p class="text-body-md font-body-md text-on-surface mb-md">Clear as day while playing with blocks.</p>
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full overflow-hidden ring-1 ring-surface-variant">
+<img alt="Parent" class="w-full h-full object-cover" data-alt="A tiny profile picture of a smiling young mother with brown hair, soft natural lighting, warm and welcoming expression. High quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgffZZdmZu9JOyB7FqWO4IGshnT3UW5Sm0FaTnmA7LwHwklPmDuym4TuWfVbSlTPGtfzYkrZJUZdGM5Q0AHS8nTZVX6lDP2RdMvHKrEqo2Y_d0-1Frx1tj582XP8nWMj_LlulROBiIKTrfOLQDni6sxrlkpEdCks4Hb7_tfPOroMj__37XXirL2nz3QpxAobCmS39z7OdEaEeBTP_Y1CGgyC5eH6kDsmeWco7egI2aqHfxQ8I-3b-jDA"/>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">Sophie</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Milestone Entry 3 -->
+<article class="timeline-card relative pl-16">
+<div class="timeline-line"></div>
+<div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center z-10 shadow-[0_4px_12px_rgba(116,89,63,0.1)] border-4 border-surface">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0_8px_20px_rgba(116,89,63,0.06)] relative overflow-hidden">
+<div class="absolute top-md right-md w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(0,116,34,0.4)]" title="Synced"></div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Isst selbstständig</h2>
+<div class="flex items-center gap-2 mb-sm text-on-surface-variant">
+<span class="text-label-sm font-label-sm bg-surface-variant px-2 py-1 rounded-sm">15. Aug 2023</span>
+<span class="text-caption font-caption">• Age: 11 months</span>
+</div>
+<div class="mt-sm flex flex-col justify-between">
+<p class="text-body-md font-body-md text-on-surface mb-md">Managed to eat banana slices all by himself. Messy but proud!</p>
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full overflow-hidden ring-1 ring-surface-variant bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">person</span>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">Markus</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-primary-container to-primary-fixed flex items-center justify-center rounded-2xl shadow-[0_8px_24px_rgba(255,218,185,0.6)] z-50 transition-transform active:scale-90 hover:-translate-y-1">
+<span class="material-symbols-outlined text-[32px] text-on-primary-container">add</span>
+</button>
+<!-- Bottom Navigation Bar (Timeline Active) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 pt-2 bg-surface-container dark:bg-surface-container-low shadow-[0_-4px_20px_rgba(116,89,63,0.06)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-full">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="text-label-sm font-label-sm mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 active:scale-95 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="auto_stories" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="text-label-sm font-label-sm mt-1">Timeline</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-full">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+<span class="text-label-sm font-label-sm mt-1">Sharing</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-variant dark:hover:bg-surface-container-highest rounded-full">
+<span class="material-symbols-outlined" data-icon="person_celebrate">person_celebrate</span>
+<span class="text-label-sm font-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>
