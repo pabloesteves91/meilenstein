@@ -9,7 +9,7 @@ import {
 import { auth } from '../lib/firebase'
 
 const ACTION_CODE_SETTINGS = {
-  url: `${window.location.origin}/finish-login`,
+  url: `${window.location.origin}${import.meta.env.BASE_URL}finish-login`,
   handleCodeInApp: true,
 }
 
