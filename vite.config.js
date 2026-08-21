@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/meilenstein/',
   plugins: [
     react(),
     VitePWA({
@@ -16,7 +17,7 @@ export default defineConfig({
         background_color: '#fef8f1',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/meilenstein/',
         icons: [
           {
             src: 'icons/icon-192.png',
@@ -40,10 +41,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+            urlPattern: /^https:\/\/firestore\.googleapis\.com\/.*/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'supabase-cache',
+              cacheName: 'firebase-cache',
               expiration: { maxEntries: 100, maxAgeSeconds: 86400 }
             }
           }
