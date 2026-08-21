@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meilenstein - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fef8f1",
+                        "surface": "#fef8f1",
+                        "on-primary-container": "#795e44",
+                        "secondary-fixed": "#bbebf1",
+                        "secondary-container": "#b8e8ee",
+                        "on-tertiary-container": "#007422",
+                        "surface-container-low": "#f9f3ec",
+                        "on-surface": "#1d1b17",
+                        "surface-variant": "#e7e2db",
+                        "outline": "#80756c",
+                        "surface-container-highest": "#e7e2db",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005316",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#93f993",
+                        "inverse-on-surface": "#f6f0e9",
+                        "background": "#fef8f1",
+                        "on-error": "#ffffff",
+                        "tertiary": "#006e20",
+                        "on-tertiary-fixed": "#002105",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#e3c0a0",
+                        "on-secondary-fixed": "#001f23",
+                        "outline-variant": "#d2c4b9",
+                        "surface-dim": "#dfd9d2",
+                        "on-secondary-container": "#3b6a6f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#ffdab9",
+                        "on-background": "#1d1b17",
+                        "on-primary-fixed-variant": "#5a422a",
+                        "on-surface-variant": "#4f453d",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#ffdcbe",
+                        "inverse-surface": "#32302c",
+                        "secondary-fixed-dim": "#9fcfd5",
+                        "primary-fixed-dim": "#e3c0a0",
+                        "primary": "#74593f",
+                        "tertiary-fixed-dim": "#77dc7a",
+                        "surface-tint": "#74593f",
+                        "tertiary-container": "#91f892",
+                        "surface-container-high": "#ede7e0",
+                        "on-primary-fixed": "#2a1704",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#1d4d53",
+                        "secondary": "#37656b",
+                        "surface-container": "#f3ede6",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Quicksand"],
+                        "label-sm": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "headline-sm": ["Quicksand"],
+                        "caption": ["Quicksand"],
+                        "body-lg": ["Quicksand"],
+                        "display-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "label-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fef8f1; /* Custom fallback */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .soft-shadow {
+            box-shadow: 0 8px 20px rgba(116, 89, 63, 0.06);
+        }
+        .inner-pressed {
+            box-shadow: inset 0 2px 4px rgba(116, 89, 63, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col pb-24 pt-20">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-sm px-container-margin py-sm flex justify-between items-center transition-all">
+<button aria-label="Menu" class="w-10 h-10 flex items-center justify-center rounded-full hover:opacity-80 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-primary text-[24px]">menu</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">Meilenstein</h1>
+<button aria-label="Parent Profile Avatar" class="w-10 h-10 rounded-full overflow-hidden hover:opacity-80 active:scale-95 transition-all border-2 border-transparent hover:border-primary-container">
+<img alt="Parent Avatar" class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a friendly parent with warm lighting, smiling softly. The background is a soft, blurred pastel color fitting the UI's warm, cozy, and nostalgic aesthetic. Minimalist and high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfzvsRwsixDAtsnd9xsegP9pjKER4Vt-FPEG7RbbO4hPzkhOP_jt-ZqJc2FCjtQazXnS6MV23-5eUh4fhR0QIHudsoCMrFRy-4W3TcoiqNPNuppyMPlfP1Jkbm5266J21MARJtxKQs2K6syfh1IuFwRyHIVLqiVIvL6vGd9HNpY7SVFNJEJY-_od-sQOtnw_OcGFyoywoVZ0D88dmxR5TRCtUM9hk2Hk2fRIzp0PxGrQoIcZGetSsZ-g"/>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow px-container-margin py-lg flex flex-col gap-lg max-w-2xl mx-auto w-full">
+<!-- Welcome Header -->
+<section class="text-center mb-md">
+<h2 class="text-display-lg font-display-lg text-primary mb-sm">Your Family</h2>
+<p class="text-body-lg font-body-lg text-outline">Capture every precious moment.</p>
+</section>
+<!-- Bento Grid for Children -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Child Card 1 -->
+<article class="bg-surface-container-lowest rounded-[24px] p-md flex flex-col items-center text-center soft-shadow relative overflow-hidden group cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute top-0 right-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-outline text-[20px]">edit</span>
+</div>
+<div class="w-24 h-24 rounded-full overflow-hidden mb-sm border-4 border-surface-bright soft-shadow">
+<img alt="Emil" class="w-full h-full object-cover" data-alt="A soft, joyful portrait of a toddler boy named Emil, aged 2, smiling in a brightly lit room. The lighting is warm and natural, casting soft shadows. The overall aesthetic is tender, nostalgic, and fits a high-end digital scrapbook style with gentle pastel hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGEhoTkZ_nWmW6C1YCVXjNuauqenPkB7gE7ps-Ge5vbOzDXd_HeQe7NDv3J5jK8iTHVYMfyo7k2vN32wqoBefq9TZBQb8wx4t_4PrHiGkRgOy_qlKuN9Ppur3vvGL6EyCE4Iu8whVy5Ee9V-vH0w0aqe1rvrTbm4dzcHj_UUsnwRrwPaosQEQlOY942olxrnF5rVpSvLShwEXd5TRTexU5NfbQWmik143FUcZyhQo1sHYrn5GfQv9Rqw"/>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Emil</h3>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-caption font-caption mb-md">2 years, 3 months</span>
+<div class="w-full mt-auto flex justify-between items-center px-sm pt-sm border-t border-surface-variant">
+<div class="flex flex-col items-center">
+<span class="text-primary text-headline-sm font-headline-sm">12</span>
+<span class="text-outline text-caption font-caption">Milestones</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-primary text-headline-sm font-headline-sm">45</span>
+<span class="text-outline text-caption font-caption">Photos</span>
+</div>
+</div>
+</article>
+<!-- Child Card 2 -->
+<article class="bg-surface-container-lowest rounded-[24px] p-md flex flex-col items-center text-center soft-shadow relative overflow-hidden group cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute top-0 right-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-outline text-[20px]">edit</span>
+</div>
+<div class="w-24 h-24 rounded-full overflow-hidden mb-sm border-4 border-surface-bright soft-shadow">
+<img alt="Clara" class="w-full h-full object-cover" data-alt="A soft, joyful portrait of a baby girl named Clara, aged 8 months, smiling gently. The lighting is warm and natural, casting soft shadows. The overall aesthetic is tender, nostalgic, and fits a high-end digital scrapbook style with gentle pastel hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDTDLaxVGTVpSzadvHhnL_P3ECEQBP38zOPBzOreckqnoALG_cClLIRYQ5eYjlVC5S_ETOa51QkEm516Mdf5RAieAohLsa6syUbPUW3sdEgtnMhNBG8a9rQtQQG4IYtuzZla5Q-xYxD1oqkWk4kqdFs4I7A4jxQw5x7sn58jC7ceoaqlUY17WRhuwC7kQIiE2yLF2bUEjxiKGyvWKpjVAgYwZCDpdMl5rvsqAJIuW-MtMQN6d_oDwV7A"/>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Clara</h3>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-caption font-caption mb-md">8 months</span>
+<div class="w-full mt-auto flex justify-between items-center px-sm pt-sm border-t border-surface-variant">
+<div class="flex flex-col items-center">
+<span class="text-primary text-headline-sm font-headline-sm">8</span>
+<span class="text-outline text-caption font-caption">Milestones</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-primary text-headline-sm font-headline-sm">22</span>
+<span class="text-outline text-caption font-caption">Photos</span>
+</div>
+</div>
+</article>
+<!-- Add New Child Card -->
+<button class="bg-surface-container border-2 border-dashed border-outline-variant rounded-[24px] p-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-low transition-colors duration-300 min-h-[220px] md:col-span-full group">
+<div class="w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-sm group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-xs">Add new child</h3>
+<p class="text-body-md font-body-md text-outline">Start a new memory scrapbook.</p>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 pt-2 bg-surface-container shadow-[0_-4px_20px_rgba(116,89,63,0.06)] rounded-t-xl md:hidden">
+<!-- Active: Dashboard -->
+<button class="flex flex-col items-center justify-center w-16 group">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 mb-1 transition-transform group-active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary">Dashboard</span>
+</button>
+<!-- Inactive: Timeline -->
+<button class="flex flex-col items-center justify-center w-16 group hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mb-1 group-active:scale-95 transition-transform">auto_stories</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Timeline</span>
+</button>
+<!-- Inactive: Sharing -->
+<button class="flex flex-col items-center justify-center w-16 group hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mb-1 group-active:scale-95 transition-transform">group_add</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Sharing</span>
+</button>
+<!-- Inactive: Profile -->
+<button class="flex flex-col items-center justify-center w-16 group hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mb-1 group-active:scale-95 transition-transform">person_celebrate</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Profile</span>
+</button>
+</nav>
+<!-- Desktop Navigation (Hidden on Mobile, simplified representation as it wasn't explicitly requested, but good practice for responsive design if the bottom nav is hidden) -->
+<nav class="hidden md:flex fixed top-0 right-container-margin h-16 items-center gap-md z-50">
+<button class="text-primary font-bold hover:opacity-80 transition-opacity">Dashboard</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">Timeline</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">Sharing</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">Profile</button>
+</nav>
+</body></html>
