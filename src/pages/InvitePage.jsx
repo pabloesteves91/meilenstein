@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 export function InvitePage({ user }) {
   const { id: childId } = useParams()
@@ -12,12 +13,17 @@ export function InvitePage({ user }) {
   const generateInvite = async () => {
     setLoading(true)
     const code = Math.random().toString(36).slice(2, 10).toUpperCase()
-    const gueltigBis = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-    const { data, error } = await supabase
-      .from('invites')
-      .insert({ id: crypto.randomUUID(), child_id: childId, code, erstellt_von: user.id, gueltig_bis: gueltigBis })
-      .select().single()
-    if (!error && data) setInvite(data)
+    const gueltigBis = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    const id = crypto.randomUUID()
+    const inviteData = {
+      child_id: childId,
+      code,
+      erstellt_von: user.uid,
+      gueltig_bis: gueltigBis,
+      created_at: serverTimestamp(),
+    }
+    await setDoc(doc(db, 'invites', id), inviteData)
+    setInvite({ id, code, gueltig_bis: gueltigBis })
     setLoading(false)
   }
 
@@ -32,7 +38,6 @@ export function InvitePage({ user }) {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#fef8f1' }}>
-      {/* Header */}
       <header className="bg-surface shadow-soft flex justify-between items-center w-full px-container-margin py-sm sticky top-0 z-50 pt-14">
         <button onClick={() => navigate(-1)} className="text-on-surface-variant p-1 hover:opacity-80 transition active:scale-95">
           <span className="material-symbols-outlined">arrow_back</span>
@@ -42,8 +47,7 @@ export function InvitePage({ user }) {
       </header>
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-container-margin pt-xl pb-28 flex flex-col gap-xl">
-        {/* Subtitle */}
-        <header className="text-center space-y-sm">
+        <header className="text-center">
           <p className="text-body-md font-body-md text-on-surface-variant">
             Lade Familie und Freunde ein, an den Erinnerungen teilzuhaben.
           </p>
@@ -66,29 +70,20 @@ export function InvitePage({ user }) {
               <button
                 onClick={generateInvite}
                 disabled={loading}
-                className="py-md px-xl rounded-full text-label-sm font-label-sm text-on-primary-container shadow-soft hover:opacity-90 transition disabled:opacity-60"
+                className="py-md px-xl rounded-full text-label-sm font-label-sm text-on-primary shadow-soft hover:opacity-90 transition disabled:opacity-60"
                 style={{ background: 'linear-gradient(135deg, #74593f, #8a6a4c)' }}
               >
-                <span className="text-on-primary">
-                  {loading ? 'Generiere…' : 'Einladungslink generieren'}
-                </span>
+                {loading ? 'Generiere…' : 'Einladungslink generieren'}
               </button>
             ) : (
               <>
-                {/* Code display */}
                 <div className="bg-surface-container-low rounded-full py-md px-xl mb-lg inline-block border-2 border-surface-variant">
-                  <span className="text-display-lg font-display-lg tracking-widest text-primary">
-                    {invite.code}
-                  </span>
+                  <span className="text-display-lg font-display-lg tracking-widest text-primary">{invite.code}</span>
                 </div>
-
-                {/* Link */}
                 <div className="flex items-center justify-center gap-sm bg-surface rounded-full p-sm px-md mb-lg">
                   <span className="material-symbols-outlined text-on-surface-variant text-xl">link</span>
                   <span className="text-body-md font-body-md text-primary truncate max-w-[220px]">{link}</span>
                 </div>
-
-                {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-md w-full justify-center">
                   <button
                     onClick={copyLink}
@@ -109,14 +104,13 @@ export function InvitePage({ user }) {
                   )}
                 </div>
                 <p className="text-caption font-caption text-outline mt-md">
-                  Gültig bis: {new Date(invite.gueltig_bis).toLocaleDateString('de-DE')}
+                  Gültig bis: {invite.gueltig_bis.toLocaleDateString('de-DE')}
                 </p>
               </>
             )}
           </div>
         </section>
 
-        {/* Info */}
         <section className="bg-secondary-container/30 rounded-xl p-md flex gap-sm">
           <span className="material-symbols-outlined text-secondary shrink-0 mt-0.5">info</span>
           <p className="text-body-md font-body-md text-on-surface-variant">

@@ -1,81 +1,59 @@
 import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
-import { getLocalEntries, saveLocalEntry, deleteLocalEntry } from '../lib/db'
-import { fetchAndCacheEntries, syncPendingEntries } from '../lib/sync'
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, setDoc, deleteDoc, serverTimestamp,
+} from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 export function useEntries(childId, user) {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const load = useCallback(async () => {
-    if (!childId) { setEntries([]); setLoading(false); return }
-    const local = await getLocalEntries(childId)
-    if (local.length) setEntries(local)
-
-    try {
-      const remote = await fetchAndCacheEntries(childId)
-      setEntries(remote)
-    } catch {
-      // stay with local
-    }
-    setLoading(false)
-  }, [childId])
-
-  useEffect(() => { load() }, [load])
-
-  // Auto-sync when online
   useEffect(() => {
-    const handleOnline = async () => {
-      await syncPendingEntries()
-      await load()
-    }
-    window.addEventListener('online', handleOnline)
-    return () => window.removeEventListener('online', handleOnline)
-  }, [load])
+    if (!childId || !user) { setEntries([]); setLoading(false); return }
 
-  const addEntry = async (data) => {
+    const q = query(
+      collection(db, 'entries'),
+      where('child_id', '==', childId),
+      orderBy('datum', 'desc')
+    )
+
+    const unsubscribe = onSnapshot(q, (snap) => {
+      const data = snap.docs.map(d => ({
+        id: d.id,
+        ...d.data(),
+        // hasPendingWrites = not yet synced to server (offline)
+        sync_status: d.metadata.hasPendingWrites ? 'pending' : 'synced',
+      }))
+      setEntries(data)
+      setLoading(false)
+    }, () => setLoading(false))
+
+    return unsubscribe
+  }, [childId, user])
+
+  const addEntry = useCallback(async (data) => {
+    if (!user) return
+    const id = crypto.randomUUID()
     const entry = {
-      id: crypto.randomUUID(),
       child_id: childId,
       titel: data.titel,
       kategorie: data.kategorie,
       datum: data.datum,
       notiz: data.notiz || null,
       foto_url: data.foto_url || null,
-      erstellt_von: user.id,
-      sync_status: 'pending',
+      erstellt_von: user.uid,
+      erstellt_von_email: user.email || null,
+      created_at: serverTimestamp(),
     }
+    // setDoc writes immediately to local cache → onSnapshot fires at once (optimistic UI)
+    await setDoc(doc(db, 'entries', id), entry)
+    return { id, ...entry }
+  }, [childId, user])
 
-    // Optimistic update
-    await saveLocalEntry(entry)
-    setEntries(prev => [entry, ...prev].sort((a, b) => new Date(b.datum) - new Date(a.datum)))
+  const removeEntry = useCallback(async (id) => {
+    await deleteDoc(doc(db, 'entries', id))
+  }, [])
 
-    if (navigator.onLine) {
-      try {
-        const { sync_status, ...dbData } = entry
-        const { error } = await supabase.from('entries').insert(dbData)
-        if (!error) {
-          const updated = { ...entry, sync_status: 'synced' }
-          await saveLocalEntry(updated)
-          setEntries(prev => prev.map(e => e.id === entry.id ? updated : e))
-        }
-      } catch {
-        // stays pending
-      }
-    }
-
-    return entry
-  }
-
-  const removeEntry = async (id) => {
-    await deleteLocalEntry(id)
-    setEntries(prev => prev.filter(e => e.id !== id))
-    try {
-      await supabase.from('entries').delete().eq('id', id)
-    } catch (e) {
-      console.error('Remove entry sync failed', e)
-    }
-  }
-
-  return { entries, loading, addEntry, removeEntry, refresh: load }
+  return { entries, loading, addEntry, removeEntry }
 }

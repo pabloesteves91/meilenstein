@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import { BottomNav } from './components/BottomNav'
 import { OfflineBanner } from './components/OfflineBanner'
 import { LoginPage } from './pages/LoginPage'
+import { FinishLoginPage } from './pages/FinishLoginPage'
 import { HomePage } from './pages/HomePage'
 import { ChildPage } from './pages/ChildPage'
 import { AddEntryPage } from './pages/AddEntryPage'
@@ -34,6 +35,7 @@ function AppLayout({ user, loading }) {
     <>
       <Routes>
         <Route path="/login" element={user && !loading ? <Navigate to="/" replace /> : <LoginPage />} />
+        <Route path="/finish-login" element={<FinishLoginPage />} />
         <Route path="/join/:code" element={<JoinPage user={user} />} />
 
         <Route

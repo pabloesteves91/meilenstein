@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
 export function LoginPage() {
-  const { signInWithMagicLink } = useAuth()
+  const { sendMagicLink } = useAuth()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -12,7 +12,7 @@ export function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const { error } = await signInWithMagicLink(email)
+    const { error } = await sendMagicLink(email)
     if (error) setError(error.message)
     else setSent(true)
     setLoading(false)
@@ -23,17 +23,12 @@ export function LoginPage() {
       className="min-h-screen flex flex-col items-center justify-center px-container-margin relative overflow-hidden"
       style={{ background: '#fef8f1' }}
     >
-      {/* Decorative gradient blobs */}
       <div
         className="absolute top-0 left-0 w-full h-64 pointer-events-none"
-        style={{
-          background: 'linear-gradient(135deg, #ffdab9 0%, #bbebf1 100%)',
-          opacity: 0.18,
-        }}
+        style={{ background: 'linear-gradient(135deg, #ffdab9 0%, #bbebf1 100%)', opacity: 0.18 }}
       />
 
       <div className="z-10 w-full max-w-sm">
-        {/* Hero */}
         <div className="text-center mb-10">
           <div
             className="w-20 h-20 rounded-xl mx-auto mb-5 flex items-center justify-center"
@@ -47,18 +42,18 @@ export function LoginPage() {
           </p>
         </div>
 
-        {/* Card */}
         <div className="bg-surface-container-lowest rounded-xl p-lg shadow-soft">
           {sent ? (
             <div className="text-center py-4 space-y-3">
               <span className="material-symbols-outlined text-5xl text-secondary ms-fill block">mark_email_read</span>
               <h2 className="text-headline-sm font-headline-sm text-on-surface">Schau in dein Postfach!</h2>
               <p className="text-body-md font-body-md text-on-surface-variant">
-                Wir haben einen Magic-Link an <strong className="text-primary">{email}</strong> gesendet.
+                Wir haben einen Magic-Link an{' '}
+                <strong className="text-primary">{email}</strong> gesendet. Klick darauf zum Einloggen.
               </p>
               <button
                 onClick={() => setSent(false)}
-                className="text-label-sm font-label-sm text-primary mt-2 underline-offset-2 hover:underline"
+                className="text-label-sm font-label-sm text-primary hover:underline underline-offset-2"
               >
                 Andere E-Mail verwenden
               </button>
@@ -75,8 +70,7 @@ export function LoginPage() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="deine@email.de"
-                  className="w-full bg-surface-container-lowest border-2 border-outline-variant rounded-lg px-4 py-3 text-body-lg font-body-lg focus:outline-none focus:border-primary-container focus:ring-2 transition-all text-on-surface placeholder:text-outline"
-                  style={{ '--tw-ring-color': 'rgba(255,218,185,0.3)' }}
+                  className="w-full bg-surface-container-lowest border-2 border-outline-variant rounded-lg px-4 py-3 text-body-lg font-body-lg focus:outline-none focus:border-primary-container transition-all text-on-surface placeholder:text-outline"
                 />
               </div>
               {error && (
@@ -88,7 +82,7 @@ export function LoginPage() {
                 className="w-full py-4 rounded-full text-headline-sm font-headline-sm text-on-primary-container shadow-soft hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 flex items-center justify-center gap-sm"
                 style={{ background: 'linear-gradient(135deg, #ffdab9, #ffdcbe)' }}
               >
-                <span className="material-symbols-outlined ms-fill">magic_button</span>
+                <span className="material-symbols-outlined ms-fill">send</span>
                 {loading ? 'Sende Link…' : 'Magic Link senden'}
               </button>
             </form>

@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Children: read/write only if the user is in the members array
+    match /children/{childId} {
+      allow read, update: if request.auth != null
+        && request.auth.uid in resource.data.members;
+      allow create: if request.auth != null
+        && request.auth.uid in request.resource.data.members
+        && request.auth.uid == request.resource.data.owner_id;
+      allow delete: if request.auth != null
+        && request.auth.uid == resource.data.owner_id;
+    }
+
+    // Entries: read/write if the user is a member of the related child
+    match /entries/{entryId} {
+      allow read, write: if request.auth != null
+        && exists(/databases/$(database)/documents/children/$(resource.data.child_id))
+        && request.auth.uid in get(/databases/$(database)/documents/children/$(resource.data.child_id)).data.members;
+      // Allow create separately to access request.resource instead of resource
+      allow create: if request.auth != null
+        && exists(/databases/$(database)/documents/children/$(request.resource.data.child_id))
+        && request.auth.uid in get(/databases/$(database)/documents/children/$(request.resource.data.child_id)).data.members;
+    }
+
+    // Invites: any authenticated user can read (to join); only creator can write
+    match /invites/{inviteId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.erstellt_von;
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.erstellt_von;
+    }
+  }
+}
